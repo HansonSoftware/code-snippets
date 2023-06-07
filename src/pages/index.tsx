@@ -14,6 +14,7 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import LoginIcon from "@mui/icons-material/Login";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LaunchIcon from "@mui/icons-material/Launch";
+import MenuIcon from "@mui/icons-material/Menu";
 
 type Topic = RouterOutputs["topic"]["getAll"][0];
 type Snippet = RouterOutputs["snippet"]["getAll"][0];
@@ -42,20 +43,20 @@ const Login = () => {
     <>
       <LoginHeader />
       <main className="grid min-h-screen w-screen place-items-center bg-gradient-to-bl from-base-100 to-secondary">
-        <div className="flex max-w-3xl flex-col gap-12 p-4 md:flex-row md:gap-20">
-          <div className="grid place-items-center">
-            <h1 className="text-center text-3xl md:text-4xl">
-              Save your code. Simple, Fast.
+        <div className="flex max-w-6xl flex-col gap-12 p-4 lg:flex-row lg:gap-20">
+          <div className="grid w-full max-w-lg place-items-center">
+            <h1 className="pt-12 text-center text-3xl md:text-4xl">
+              Save your code snippets. Just write some Markdown.
             </h1>
           </div>
           {/* Login Card */}
-          <div className="card h-64 w-full max-w-sm bg-base-100 bg-opacity-20 backdrop-blur-3xl">
+          <div className="card h-60 w-full max-w-sm bg-base-100 bg-opacity-20 backdrop-blur-3xl">
             <div className="card-body items-center gap-8">
               <h2 className="text-2xl font-bold sm:text-3xl md:text-4xl">
                 Login with GitHub
               </h2>
               <h3 className="text-3xl text-secondary">
-                <GitHubIcon />
+                <GitHubIcon style={{ width: "34px", height: "34px" }} />
               </h3>
               <button
                 className="btn-outline btn max-w-md"
@@ -91,6 +92,12 @@ const MainContent = () => {
     },
   });
 
+  const deleteTopic = api.topic.delete.useMutation({
+    onSuccess: () => {
+      void refetchTopics(); // void tells TS to calm down for now
+    },
+  });
+
   const { data: snippets, refetch: refetchSnippets } =
     api.snippet.getAll.useQuery(
       {
@@ -116,16 +123,16 @@ const MainContent = () => {
   return (
     <>
       <MainHeader />
-      <main className="mx-6 grid min-h-screen grid-cols-6 gap-2 pt-16">
+      <main className="grid min-h-screen grid-cols-5 gap-2 bg-gradient-to-br from-base-100 to-secondary pt-16 md:grid-cols-6">
         {/* Sidebar */}
-        <div className="p-2">
+        <div className="hidden flex-col p-4 md:flex">
           <div className="divider"></div>
           <input
             type="text"
             name="topics"
             id="topics"
             placeholder="New Topic"
-            className="input-bordered input input-sm w-full"
+            className="input-bordered input input-sm w-full bg-base-100 bg-opacity-20 text-neutral placeholder:text-neutral"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 createTopic.mutate({
@@ -136,25 +143,33 @@ const MainContent = () => {
             }}
           />
           <div className="divider"></div>
-          <ul className="menu rounded-box w-full bg-base-100 p-2">
-            {topics?.map((topic) => (
-              <li className="w-full" key={topic.id}>
-                <a
-                  className="w-full"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setSelectedTopic(topic);
-                  }}
-                >
-                  {topic.title}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="relative mx-auto h-[70vh] overflow-hidden p-0 md:flex">
+            <ul className="flex h-[70vh] flex-col gap-4 overflow-y-auto">
+              {topics?.map((topic) => (
+                <li className="flex w-full flex-row" key={topic.id}>
+                  <a
+                    className="btn-ghost btn-sm btn w-full max-w-[8rem] truncate text-lg font-medium normal-case"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedTopic(topic);
+                    }}
+                  >
+                    {topic.title}
+                  </a>
+                  <button
+                    className="text-error"
+                    onClick={() => deleteTopic.mutate({ id: topic.id })}
+                  >
+                    <DeleteForeverIcon />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         {/* Sidebar */}
         {/* Snippets */}
-        <div className="col-span-5 bg-base-100">
+        <div className="col-span-5">
           <Editor
             onSave={({ title, content }) => {
               void createSnippet.mutate({
@@ -186,10 +201,13 @@ const MainHeader = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <header className="navbar fixed z-50 bg-base-100 p-4">
+    <header className="navbar fixed z-50 bg-base-100 bg-opacity-30 p-2">
       <div className="flex-1">
-        <a className="btn-ghost btn text-xl normal-case">
+        <a className="btn-ghost btn hidden text-xl normal-case md:flex">
           {sessionData?.user?.name ? `${sessionData.user.name}'s Snippets` : ""}
+        </a>
+        <a className="bth btn-ghost btn-circle flex content-center items-center text-secondary md:hidden">
+          <MenuIcon style={{ width: "32px", height: "32px" }} />
         </a>
       </div>
       <div className="flex-none gap-2">
@@ -208,15 +226,6 @@ const MainHeader = () => {
             tabIndex={0}
             className="dropdown-content menu rounded-box menu-sm mt-3 w-52 bg-base-100 p-2 shadow"
           >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
             <li>
               <a onClick={() => void signOut()}>Logout</a>
             </li>
@@ -252,12 +261,12 @@ const Editor = ({
 
   return (
     <div className="card">
-      <div className="card-body pb-0">
+      <div className="card-body pb-2">
         <h2 className="card-title">
           <input
             type="text"
             placeholder="New Snippet"
-            className="input-bordered input input-lg w-full font-bold"
+            className="input-bordered input input-lg w-full bg-base-100 bg-opacity-20 font-bold text-neutral placeholder:text-neutral"
             value={title}
             onChange={(e) => setTitle(e.currentTarget.value)}
           />
@@ -271,7 +280,7 @@ const Editor = ({
           ]}
           onChange={(value) => setCode(value)}
           className="w-full"
-          theme={"light"}
+          theme={"dark"}
         />
         <div className="card-actions justify-end p-2">
           <button
@@ -308,20 +317,20 @@ const SnippetView = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="card border-2 border-neutral p-2 shadow-2xl">
+    <div className="card bg-base-100 bg-opacity-20 p-2 text-neutral shadow-2xl">
       <div className="card-body p-0">
         <div
           className={`collapse-arrow ${isOpen ? "collapse-open" : ""} collapse`}
         >
           <h2
-            className="collapse-title cursor-pointer text-xl font-bold"
+            className="collapse-title cursor-pointer truncate text-xl font-bold"
             onClick={() => setIsOpen(!isOpen)}
           >
             {snippet.title}
           </h2>
           <div className="collapse-content">
             <div className="divider" />
-            <article className="prose-stone prose p-2">
+            <article className="prose-stone prose p-2 md:prose-pre:w-[75vw]">
               <ReactMarkdown>{snippet.content}</ReactMarkdown>
             </article>
             <div className="card-actions flex w-full justify-end">
