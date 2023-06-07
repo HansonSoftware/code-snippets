@@ -11,6 +11,9 @@ import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import ReactMarkdown from "react-markdown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import LoginIcon from "@mui/icons-material/Login";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LaunchIcon from "@mui/icons-material/Launch";
 
 type Topic = RouterOutputs["topic"]["getAll"][0];
 type Snippet = RouterOutputs["snippet"]["getAll"][0];
@@ -24,27 +27,50 @@ const Home: NextPage = () => {
         <meta name="description" content="All in one markdown notes app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header />
-
-      {sessionData !== null && (
-        <main className="mx-6 grid min-h-screen grid-cols-6 gap-2 pt-16">
-          <MainContent />
-        </main>
-      )}
-
-      {sessionData === null && (
-        <main className="mx-6 grid min-h-screen grid-cols-6 gap-2 pt-16">
-          <button className="btn-primary btn" onClick={() => void signIn()}>
-            Sign in
-          </button>
-        </main>
-      )}
+      {/* User Logged In */}
+      {sessionData !== null && <MainContent />}
+      {/* User Not Logged In */}
+      {sessionData === null && <Login />}
     </>
   );
 };
 
 export default Home;
+
+const Login = () => {
+  return (
+    <>
+      <LoginHeader />
+      <main className="grid min-h-screen w-screen place-items-center bg-gradient-to-bl from-base-100 to-secondary">
+        <div className="flex max-w-3xl flex-col gap-12 p-4 md:flex-row md:gap-20">
+          <div className="grid place-items-center">
+            <h1 className="text-center text-3xl md:text-4xl">
+              Save your code. Simple, Fast.
+            </h1>
+          </div>
+          {/* Login Card */}
+          <div className="card h-64 w-full max-w-sm bg-base-100 bg-opacity-20 backdrop-blur-3xl">
+            <div className="card-body items-center gap-8">
+              <h2 className="text-2xl font-bold sm:text-3xl md:text-4xl">
+                Login with GitHub
+              </h2>
+              <h3 className="text-3xl text-secondary">
+                <GitHubIcon />
+              </h3>
+              <button
+                className="btn-outline btn max-w-md"
+                onClick={() => void signIn()}
+              >
+                Login <LoginIcon />
+              </button>
+            </div>
+          </div>
+          {/* Login Card */}
+        </div>
+      </main>
+    </>
+  );
+};
 
 const MainContent = () => {
   const { data: sessionData } = useSession();
@@ -89,75 +115,78 @@ const MainContent = () => {
 
   return (
     <>
-      {/* Sidebar */}
-      <div className="p-2">
-        <div className="divider"></div>
-        <input
-          type="text"
-          name="topics"
-          id="topics"
-          placeholder="New Topic"
-          className="input-bordered input input-sm w-full"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              createTopic.mutate({
-                title: e.currentTarget.value,
-              });
-              e.currentTarget.value = "";
-            }
-          }}
-        />
-        <div className="divider"></div>
-        <ul className="menu rounded-box w-full bg-base-100 p-2">
-          {topics?.map((topic) => (
-            <li className="w-full" key={topic.id}>
-              <a
-                className="w-full"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectedTopic(topic);
-                }}
-              >
-                {topic.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-      {/* Sidebar */}
-      {/* Snippets */}
-      <div className="col-span-5 bg-base-100">
-        <Editor
-          onSave={({ title, content }) => {
-            void createSnippet.mutate({
-              title,
-              content,
-              topicId: selectedTopic?.id ?? "",
-            });
-          }}
-        />
-        <div className="divider px-8"></div>
-        <div className="flex flex-col gap-4 p-8">
-          {snippets?.map((snippet) => (
-            <div key={snippet.id}>
-              <SnippetView
-                snippet={snippet}
-                onDelete={() => void deleteSnippet.mutate({ id: snippet.id })}
-              />
-            </div>
-          ))}
+      <MainHeader />
+      <main className="mx-6 grid min-h-screen grid-cols-6 gap-2 pt-16">
+        {/* Sidebar */}
+        <div className="p-2">
+          <div className="divider"></div>
+          <input
+            type="text"
+            name="topics"
+            id="topics"
+            placeholder="New Topic"
+            className="input-bordered input input-sm w-full"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                createTopic.mutate({
+                  title: e.currentTarget.value,
+                });
+                e.currentTarget.value = "";
+              }
+            }}
+          />
+          <div className="divider"></div>
+          <ul className="menu rounded-box w-full bg-base-100 p-2">
+            {topics?.map((topic) => (
+              <li className="w-full" key={topic.id}>
+                <a
+                  className="w-full"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedTopic(topic);
+                  }}
+                >
+                  {topic.title}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-      {/* Snippets */}
+        {/* Sidebar */}
+        {/* Snippets */}
+        <div className="col-span-5 bg-base-100">
+          <Editor
+            onSave={({ title, content }) => {
+              void createSnippet.mutate({
+                title,
+                content,
+                topicId: selectedTopic?.id ?? "",
+              });
+            }}
+          />
+          <div className="divider px-8"></div>
+          <div className="flex flex-col gap-4 p-8">
+            {snippets?.map((snippet) => (
+              <div key={snippet.id}>
+                <SnippetView
+                  snippet={snippet}
+                  onDelete={() => void deleteSnippet.mutate({ id: snippet.id })}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Snippets */}
+      </main>
     </>
   );
 };
 
-const Header = () => {
+const MainHeader = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <nav className="navbar fixed z-50 bg-base-100 p-4">
+    <header className="navbar fixed z-50 bg-base-100 p-4">
       <div className="flex-1">
         <a className="btn-ghost btn text-xl normal-case">
           {sessionData?.user?.name ? `${sessionData.user.name}'s Snippets` : ""}
@@ -194,7 +223,22 @@ const Header = () => {
           </ul>
         </div>
       </div>
-    </nav>
+    </header>
+  );
+};
+
+const LoginHeader = () => {
+  return (
+    <header className="navbar fixed z-50 bg-base-100 bg-opacity-20 p-4 backdrop-blur-3xl">
+      <div className="flex-1">
+        <a className="btn-ghost btn text-xl normal-case">Code Snippets</a>
+      </div>
+      <div className="flex-end">
+        <a className="btn-ghost btn text-xl normal-case">
+          Docs <LaunchIcon />
+        </a>
+      </div>
+    </header>
   );
 };
 
@@ -227,7 +271,7 @@ const Editor = ({
           ]}
           onChange={(value) => setCode(value)}
           className="w-full"
-          theme={"dark"}
+          theme={"light"}
         />
         <div className="card-actions justify-end p-2">
           <button
