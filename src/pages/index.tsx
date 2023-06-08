@@ -26,7 +26,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Code Snippets</title>
         <meta name="description" content="All in one markdown notes app." />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/code.png" />
       </Head>
       {/* User Logged In */}
       {sessionData !== null && <MainContent />}
@@ -243,7 +243,11 @@ const LoginHeader = () => {
         <a className="btn-ghost btn text-xl normal-case">Code Snippets</a>
       </div>
       <div className="flex-end">
-        <a className="btn-ghost btn text-xl normal-case">
+        <a
+          className="btn-ghost btn text-xl normal-case"
+          href="https://code-snippets-com.vercel.app/"
+          target="_blank"
+        >
           Docs <LaunchIcon />
         </a>
       </div>
