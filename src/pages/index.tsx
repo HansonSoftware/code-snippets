@@ -1,14 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 import { api } from "~/utils/api";
-import type { RouterOutputs } from "~/utils/api";
+
+/* User AUTH Imports: */
+import { signIn, signOut, useSession } from "next-auth/react";
+
+/* React Markdown and CodeMirror Imports: */
 import CodeMirror from "@uiw/react-codemirror";
 import { languages } from "@codemirror/language-data";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import ReactMarkdown from "react-markdown";
+
+/* Icon Imports: https://mui.com/material-ui/material-icons/ */
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import LoginIcon from "@mui/icons-material/Login";
@@ -16,11 +21,15 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LaunchIcon from "@mui/icons-material/Launch";
 import MenuIcon from "@mui/icons-material/Menu";
 
+/* Type Imports from tRPC: */
+import type { RouterOutputs } from "~/utils/api";
+
 type Topic = RouterOutputs["topic"]["getAll"][0];
 type Snippet = RouterOutputs["snippet"]["getAll"][0];
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
@@ -245,7 +254,7 @@ const LoginHeader = () => {
       <div className="flex-end">
         <a
           className="btn-ghost btn text-xl normal-case"
-          href="https://code-snippets-com.vercel.app/"
+          href="https://www.haydenhanson.dev/projects/code-snippets"
           target="_blank"
         >
           Docs <LaunchIcon />
