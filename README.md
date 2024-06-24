@@ -1,9 +1,4 @@
----
-title: 'Code Snippets'
-imgUrl: '/images/projects/code-snippets/desktop-multiple-snippets.png'
-completedAt: '2023-06-21'
-summary: 'Save your code snippets with this markdown note taking app!'
----
+# Code Snippets
 
 This is a crud app that I built in order to save quick notes with markdown.
 
@@ -11,45 +6,45 @@ This is a crud app that I built in order to save quick notes with markdown.
 
 This is the login page of the app, for this project I wanted to learn NextAUTH so that's what I'm using here. I chose to use the GitHub provider. The styling for this app is the product of me playing around with gradients and blurs.
 
-![Login](/images/projects/code-snippets/desktop-login.png)
+![Login](https://haydenhanson.dev/images/projects/code-snippets/desktop-login.png)
 
 ## Mobile Login
 
 Code Snippets is a desktop app! This application is better suited for desktop, as that's where most programming happens. However, I always keep mobile responsiveness in mind, so it is compatible. Here's what it looks like.
 
-![Mobile Login](/images/projects/code-snippets/mobile-login.png)
+![Mobile Login](https://haydenhanson.dev/images/projects/code-snippets/mobile-login.png)
 
 ## Main Page
 
-![Mobile Main](/images/projects/code-snippets/mobile-main.png)
+![Mobile Main](https://haydenhanson.dev/images/projects/code-snippets/mobile-main.png)
 
 ## Writing A Snippet
 
-![Mobile Example](/images/projects/code-snippets/mobile-example.png)
+![Mobile Example](https://haydenhanson.dev/images/projects/code-snippets/mobile-example.png)
 
 This page contains the main content for the app. Here you can create a snippet, give it a name and save it under a certain topic for organization's sake.
 
 ## Main Page
 
-![Desktop Main](/images/projects/code-snippets/desktop-main.png)
+![Desktop Main](https://haydenhanson.dev/images/projects/code-snippets/desktop-main.png)
 
-Once users login, they are greeted with a blank canvas, and anything that happens here is saved to the database. If you're curious, you can try it out [here](https://code-snippets-com.vercel.app/).
+Once users login, they are greeted with a blank canvas, and anything that happens here is saved to the database. If you're curious, you can try it out [here](https://code-snippets-com.vercel.app/). Please note that the database may be down, this was a fun side project and is on the free tier plan.
 
 ## Writing A Snippet
 
-![Desktop Example](/images/projects/code-snippets/desktop-tRPC-topic.png)
+![Desktop Example](https://haydenhanson.dev/images/projects/code-snippets/desktop-tRPC-topic.png)
 
 To write a snippet, simply give it a name and start typing Markdown. Syntax highlighting and auto-completion are present to make the experience feel more like the user's IDE.
 
 ## Example Snippet
 
-![Snippet](/images/projects/code-snippets/desktop-snippet.png)
+![Snippet](https://haydenhanson.dev/images/projects/code-snippets/desktop-snippet.png)
 
 This is what a Snippet looks like when the user comes back to it. After all, it's just Markdown.
 
 ## Multiple Snippets
 
-![Multiple Snippets](/images/projects/code-snippets/desktop-multiple-snippets.png)
+![Multiple Snippets](https://haydenhanson.dev/images/projects/code-snippets/desktop-multiple-snippets.png)
 
 Through time, this is what the app will look like. Nice and organized code snippets. Here under my React Code topic, I have various examples and notes as reminders. Topics and Snippets can be deleted by clicking on the trash icon.
 
